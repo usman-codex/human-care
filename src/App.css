@@ -1,38 +1,270 @@
-.App {
+/* App.css - Updated for Alignment & Logo */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #2761e7; /* Healthwire Blue */
+  --secondary-color: #f8f9fa;
+  --text-dark: #333;
+  --text-light: #666;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f7f6;
+  overflow-x: hidden;
+}
+
+/* Header Styles */
+.top-header {
+  background: white;
+  padding: 15px 0;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* New Logo Style */
+.brand-logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.brand-logo span {
+  color: var(--primary-color);
+}
+
+/* Custom Search Bar */
+.search-container {
+  position: relative;
+  width: 100%;
+}
+.custom-search-input {
+  border: 1px solid #ced4da;
+  border-radius: 5px 0 0 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+.custom-search-btn {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 0 5px 5px 0;
+  color: white;
+  padding: 0 20px;
+  transition: 0.3s;
+}
+.custom-search-btn:hover {
+  background-color: #1a4dbf;
+}
+
+/* Icons & Buttons */
+.cart-icon-box {
+  position: relative;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 24px;
+  color: var(--text-dark);
+  transition: 0.3s;
+}
+.cart-icon-box:hover {
+  color: var(--primary-color);
+}
+
+/* Cart Badge - Sirf tab dikhega jab item ho */
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff3b30;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  min-width: 18px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.login-btn {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  padding: 8px 25px;
+  border-radius: 5px;
+  background: transparent;
+  transition: 0.3s;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.login-btn:hover {
+  background: var(--primary-color);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* User Profile Icon */
+.user-profile-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-dark);
+  font-size: 20px;
+  transition: 0.3s;
+}
+.user-profile-icon:hover {
+  background-color: var(--primary-color);
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* --- NAVBAR ALIGNMENT FIX --- */
+.main-navbar {
+  background: white;
+  border-top: 1px solid #f0f0f0;
+  padding: 0;
+  height: 60px; /* Fixed height for alignment */
+  display: flex;
+  align-items: center; /* Vertical Center */
+}
+
+/* Flex Container for Nav Items */
+.custom-nav-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between items */
+  height: 100%;
+}
+
+.nav-link-custom, .nav-item-custom {
+  color: var(--text-dark) !important;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 15px; /* Side padding only */
+  height: 60px; /* Full Navbar height */
+  display: flex;
+  align-items: center; /* Center text vertically */
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 3px solid transparent; /* Hover effect ke liye */
+}
+
+.nav-link-custom:hover, .nav-item-custom:hover {
+  color: var(--primary-color) !important;
+  border-bottom: 3px solid var(--primary-color);
+  background-color: #f8faff;
+}
+
+/* Hover Dropdown Adjustment */
+.nav-item-custom {
+  position: relative;
+}
+
+.custom-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* Just below the navbar */
+  left: 0;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  min-width: 240px;
+  border-radius: 0 0 8px 8px;
+  padding: 10px 0;
+  z-index: 999;
+  border-top: 3px solid var(--primary-color);
+}
+.nav-item-custom:hover .custom-dropdown-menu {
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+.dropdown-item-custom {
+  padding: 12px 20px;
+  color: #444;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  transition: 0.2s;
+  border-bottom: 1px solid #f9f9f9;
+}
+.dropdown-item-custom:last-child {
+  border-bottom: none;
+}
+.dropdown-item-custom:hover {
+  background-color: #f0f4ff;
+  color: var(--primary-color);
+  padding-left: 25px;
+}
+
+
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(105deg, #e3f2fd 0%, #ffffff 60%);
+    padding: 60px 0;
+    margin-top: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+}
+
+/* Mobile Sidebar & Profile Menu styles remain same as before... */
+.profile-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  width: 250px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1100;
+}
+.profile-header {
+  padding: 15px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+}
+.profile-list a {
+  display: block;
+  padding: 12px 15px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  border-bottom: 1px solid #f8f9fa;
+}
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  z-index: 2000;
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  overflow-y: auto;
+}
+.mobile-sidebar.open { right: 0; }
+.overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 1500; display: none;
+}
+.overlay.active { display: block; }
+
+
+/* App.css */
+.shadow-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
 }
