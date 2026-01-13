@@ -17,9 +17,10 @@ const UploadPrescription = () => {
         formData.append('phone', phone);
         formData.append('image', file);
         
-        // Agar user login hai to ID bhej do (Optional)
-        const user = JSON.parse(localStorage.getItem('user'));
-        if(user) formData.append('user_id', user.id);
+      const user = JSON.parse(localStorage.getItem('user'));
+        if(user) {
+            formData.append('user_id', user.id); 
+        }
 
         try {
             const res = await axios.post('http://localhost/human-care/backend/upload_prescription.php', formData);

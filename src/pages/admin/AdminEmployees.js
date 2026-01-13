@@ -1,6 +1,5 @@
-// src/pages/admin/AdminEmployees.js
 import React, { useState, useEffect } from 'react';
-import DashboardLayout from './DashboardLayout'; // <--- Sahi Path
+import DashboardLayout from './DashboardLayout';
 import { Table, Button, Modal, Form, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { FaTrash, FaUserPlus, FaPhone, FaCalendarAlt } from 'react-icons/fa';
@@ -13,7 +12,6 @@ const AdminEmployees = () => {
         name: '', position: 'Salesman', phone: '', salary: '', joining_date: ''
     });
 
-    // 1. Data Mangwana
     const fetchEmployees = async () => {
         const res = await axios.get('http://localhost/human-care/backend/get_employees.php');
         setEmployees(res.data);
@@ -23,7 +21,6 @@ const AdminEmployees = () => {
 
     const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
 
-    // 2. Add Employee
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -37,7 +34,6 @@ const AdminEmployees = () => {
         } catch(err) { alert("Server Error"); }
     };
 
-    // 3. Delete Employee
     const handleDelete = async (id) => {
         if(window.confirm("Are you sure you want to remove this employee?")) {
             await axios.post('http://localhost/human-care/backend/delete_employee.php', { id });
@@ -89,7 +85,6 @@ const AdminEmployees = () => {
                 </Table>
             </div>
 
-            {/* --- ADD EMPLOYEE MODAL --- */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add New Employee</Modal.Title>

@@ -1,11 +1,9 @@
-// src/components/HeroSlider.js
 import React from 'react';
 import { Carousel, Container, Row, Col, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 
 const HeroSlider = () => {
     
-    // Animation Settings (Neechay se oopar anay ke liye)
     const textAnimation = {
         hidden: { y: 50, opacity: 0 },
         visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
@@ -14,15 +12,14 @@ const HeroSlider = () => {
     return (
         <Container className="mt-4 mb-5">
             <Carousel 
-                interval={3500} // Har 3.5 second baad change hoga
+                interval={3500} 
                 pause={false} 
                 indicators={true}
-                controls={false} // Side arrows hata diye hain (Clean look ke liye)
+                controls={false} 
                 className="hero-carousel shadow-sm"
                 style={{ borderRadius: '20px', overflow: 'hidden' }}
             >
                 
-                {/* --- SLIDE 1: BLUE THEME (OLD MAN) --- */}
                 <Carousel.Item style={{ backgroundColor: '#eef7ff', height: '400px' }}>
                     <Row className="h-100 align-items-center">
                         <Col md={7} className="ps-5">
@@ -48,11 +45,8 @@ const HeroSlider = () => {
                         </Col>
                         
                         <Col md={5} className="h-100 d-flex align-items-end justify-content-end overflow-hidden">
-                            {/* Yahan Old Man ki Image lagani hai */}
                             <img 
                                src={require('../assets/pharmacy-slider-img-1.jpg')}
-                                // src="assets/img/pharmacy-slider-img-1.jpg" 
-                                // Agar ye link na chale, to apni image download kr k src/assets me rakhen
                                 alt="Old Man" 
                                 style={{ height: '90%', objectFit: 'contain' }} 
                             />
@@ -60,9 +54,7 @@ const HeroSlider = () => {
                     </Row>
                 </Carousel.Item>
 
-                {/* --- SLIDE 2: GREEN THEME (MEDICINES) --- */}
                 <Carousel.Item style={{ backgroundColor: '#a5d6a7', height: '400px' }}>
-                     {/* Green Gradient Background */}
                     <div style={{
                         width: '100%', height: '100%', 
                         background: 'linear-gradient(90deg, #81c784 0%, #a5d6a7 100%)',
@@ -91,11 +83,9 @@ const HeroSlider = () => {
                                     </motion.div>
                                 </Col>
                                 <Col md={6}>
-                                    {/* Green Pills Image */}
                                     <img 
                                         src={require('../assets/pharmacy-slider-img-2.jpg')}
                                         style={{ width: '100%', mixBlendMode: 'multiply', opacity: 0.8 }} 
-                                        // Note: Aap apni original green wali image yahan lagayen
                                     />
                                 </Col>
                             </Row>

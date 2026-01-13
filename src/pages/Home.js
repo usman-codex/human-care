@@ -11,20 +11,29 @@ import { motion } from 'framer-motion';
 const Home = ({ addToCart }) => {
     const [products, setProducts] = useState([]);
     
-    // Pagination States for "All Medicines"
+    // Pagination States
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20; // 5 Rows x 4 Items = 20
+    const itemsPerPage = 20; 
 
     useEffect(() => {
         axios.get('http://localhost/human-care/backend/get_products.php')
-            .then(res => setProducts(res.data))
-            .catch(err => console.log("Error:", err));
+            .then(res => {
+                // Check if data is valid array
+                if (Array.isArray(res.data)) {
+                    setProducts(res.data);
+                } else {
+                    setProducts([]); 
+                }
+            })
+            .catch(err => { console.error(err); setProducts([]); });
     }, []);
 
-    // Pagination Logic
+    // Pagination Logic (Safe check added)
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentAllProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+    
+    // Ensure products is an array before slicing
+    const currentAllProducts = Array.isArray(products) ? products.slice(indexOfFirstItem, indexOfLastItem) : [];
     const totalPages = Math.ceil(products.length / itemsPerPage);
 
     return (
@@ -36,7 +45,7 @@ const Home = ({ addToCart }) => {
             {/* 2. EXPLORE CATEGORIES */}
             <ExploreCategories />
 
-            {/* 3. TABS SECTION (Devices, Family Care etc) - MOVED UP */}
+            {/* 3. TABS SECTION */}
             <ProductSection allProducts={products} addToCart={addToCart} />
 
             {/* 4. FEATURED MEDICINES (Highlight Section) */}
@@ -48,16 +57,21 @@ const Home = ({ addToCart }) => {
                     </div>
                     
                     <Row>
-                        {products.filter(p => p.section === 'featured').slice(0, 4).map((item) => (
-                            <Col xs={12} sm={6} md={3} key={item.id} className="mb-4">
-                                <ProductCard product={item} addToCart={addToCart} />
-                            </Col>
-                        ))}
+                        {/* --- FIX: Array Check Lagaya --- */}
+                        {Array.isArray(products) && products.length > 0 ? (
+                            products.filter(p => p.section === 'featured').slice(0, 4).map((item) => (
+                                <Col xs={12} sm={6} md={3} key={item.id} className="mb-4">
+                                    <ProductCard product={item} addToCart={addToCart} />
+                                </Col>
+                            ))
+                        ) : (
+                            <p className="text-center text-muted w-100">No Featured Medicines.</p>
+                        )}
                     </Row>
                 </Container>
             </section>
 
-            {/* 5. ALL MEDICINES SECTION (With Pagination) */}
+            {/* 5. ALL MEDICINES SECTION */}
             <Container className="mt-5">
                 <div className="text-center mb-5">
                     <h2 className="fw-bold">All Medicines</h2>
@@ -79,23 +93,13 @@ const Home = ({ addToCart }) => {
                 {totalPages > 1 && (
                     <div className="d-flex justify-content-center mt-4">
                         <Pagination>
-                            <Pagination.Prev 
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
-                                disabled={currentPage === 1} 
-                            />
+                            <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
                             {[...Array(totalPages)].map((_, idx) => (
-                                <Pagination.Item 
-                                    key={idx+1} 
-                                    active={idx+1 === currentPage}
-                                    onClick={() => setCurrentPage(idx+1)}
-                                >
+                                <Pagination.Item key={idx+1} active={idx+1 === currentPage} onClick={() => setCurrentPage(idx+1)}>
                                     {idx+1}
                                 </Pagination.Item>
                             ))}
-                            <Pagination.Next 
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
-                                disabled={currentPage === totalPages} 
-                            />
+                            <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
                         </Pagination>
                     </div>
                 )}

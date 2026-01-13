@@ -1,15 +1,13 @@
-// src/components/AuthModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form, InputGroup, Alert } from 'react-bootstrap';
 import { FaGoogle, FaEnvelope, FaLock, FaUser, FaPhone, FaEye, FaEyeSlash, FaCheckCircle } from 'react-icons/fa';
 import axios from 'axios';
-import { useGoogleLogin } from '@react-oauth/google'; // <--- REAL GOOGLE LOGIN HOOK
+import { useGoogleLogin } from '@react-oauth/google';
 
 const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
     const [mode, setMode] = useState('login'); 
     const [showPassword, setShowPassword] = useState(false);
     
-    // ALERTS KI JAGAH YE STATES USE HONGI
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [showSuccessScreen, setShowSuccessScreen] = useState(false);
@@ -23,11 +21,9 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
         setErrorMessage(""); 
     };
 
-    // --- ASLI GOOGLE POPUP LOGIN ---
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                // 1. Google se User ka Data mangwana
                 const userInfo = await axios.get(
                     'https://www.googleapis.com/oauth2/v3/userinfo',
                     { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
@@ -39,7 +35,6 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
                     google_id: userInfo.data.sub
                 };
 
-                // 2. Apne Backend (PHP) ko bhejna
                 const res = await axios.post('http://localhost/human-care/backend/google_auth.php', googleData);
 
                 if (res.data.success) {
@@ -58,7 +53,6 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
         onError: () => setErrorMessage("Google Login Failed"),
     });
 
-    // --- MANUAL FORM SUBMIT ---
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage("");
@@ -68,11 +62,13 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
             try {
                 const res = await axios.post('http://localhost/human-care/backend/register.php', formData);
                 if (res.data.success) {
-                    setShowSuccessScreen(true); // Green Tick Show hoga
+                    setShowSuccessScreen(true);
                 } else {
                     setErrorMessage(res.data.message);
                 }
-            } catch (error) { setErrorMessage("Server Connection Error"); }
+            } catch (error) { 
+                setErrorMessage("Server Connection Error"); 
+            }
         } 
         else if (mode === 'login') {
             try {
@@ -85,11 +81,12 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
                 } else {
                     setErrorMessage(res.data.message);
                 }
-            } catch (error) { setErrorMessage("Server Connection Error"); }
+            } catch (error) { 
+                setErrorMessage("Server Connection Error"); 
+            }
         }
     };
 
-    // --- SUCCESS SCREEN ---
     if (showSuccessScreen) {
         return (
             <Modal show={show} onHide={handleClose} centered>
@@ -114,7 +111,6 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
             </Modal.Header>
 
             <Modal.Body className="px-4 pb-4">
-                {/* MESSAGES */}
                 {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
                 {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
@@ -123,21 +119,27 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
                         <>
                             <Form.Group className="mb-3">
                                 <Form.Label>Full Name</Form.Label>
-                                <InputGroup><InputGroup.Text><FaUser/></InputGroup.Text>
-                                <Form.Control name="name" onChange={handleChange} required /></InputGroup>
+                                <InputGroup>
+                                    <InputGroup.Text><FaUser/></InputGroup.Text>
+                                    <Form.Control name="name" onChange={handleChange} required />
+                                </InputGroup>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Phone Number</Form.Label>
-                                <InputGroup><InputGroup.Text><FaPhone/></InputGroup.Text>
-                                <Form.Control name="phone" onChange={handleChange} required /></InputGroup>
+                                <InputGroup>
+                                    <InputGroup.Text><FaPhone/></InputGroup.Text>
+                                    <Form.Control name="phone" onChange={handleChange} required />
+                                </InputGroup>
                             </Form.Group>
                         </>
                     )}
 
                     <Form.Group className="mb-3">
                         <Form.Label>Email Address</Form.Label>
-                        <InputGroup><InputGroup.Text><FaEnvelope/></InputGroup.Text>
-                        <Form.Control type="email" name="email" onChange={handleChange} required /></InputGroup>
+                        <InputGroup>
+                            <InputGroup.Text><FaEnvelope/></InputGroup.Text>
+                            <Form.Control type="email" name="email" onChange={handleChange} required />
+                        </InputGroup>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
@@ -157,7 +159,6 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
 
                     <div className="text-center mb-3">OR</div>
                     
-                    {/* IS BUTTON PAR AB REAL GOOGLE LOGIN LAGA HAI */}
                     <Button variant="outline-danger" className="w-100 py-2" onClick={() => googleLogin()}>
                         <FaGoogle className="me-2"/> Continue with Gmail
                     </Button>

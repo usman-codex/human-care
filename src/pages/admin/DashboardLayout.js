@@ -20,6 +20,7 @@ const DashboardLayout = ({ children }) => {
                 <h4 className="fw-bold mb-4 ps-2">Human Care <span style={{fontSize:'12px', color:'#aaa'}}>Admin</span></h4>
                 <Nav className="flex-column gap-2">
                     <Link to="/admin/dashboard" className="nav-link text-white d-flex align-items-center"><FaChartLine className="me-2"/> Dashboard</Link>
+           
                     <Link to="/admin/products" className="nav-link text-white d-flex align-items-center"><FaPills className="me-2"/> Medicines / Stock</Link>
                     <Link to="/admin/employees" className="nav-link text-white d-flex align-items-center"><FaUserTie className="me-2"/> Employees</Link>
                     <Link to="/admin/orders" className="nav-link text-white d-flex align-items-center"><FaBoxOpen className="me-2"/> Orders</Link>

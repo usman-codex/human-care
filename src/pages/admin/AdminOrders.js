@@ -1,4 +1,3 @@
-// src/pages/admin/AdminOrders.js
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
 import { Table, Badge, Button, Modal, Form, InputGroup } from 'react-bootstrap';
@@ -13,7 +12,6 @@ const AdminOrders = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showModal, setShowModal] = useState(false);
     
-    // Status Update States
     const [statusToUpdate, setStatusToUpdate] = useState("");
     const [rejectReason, setRejectReason] = useState("");
 
@@ -27,7 +25,6 @@ const AdminOrders = () => {
 
     useEffect(() => { fetchOrders(); }, []);
 
-    // Search Logic
     useEffect(() => {
         const result = orders.filter(o => 
             o.customer_name.toLowerCase().includes(search.toLowerCase()) || 
@@ -58,14 +55,13 @@ const AdminOrders = () => {
         fetchOrders();
     };
 
-    // Print Logic
     const printInvoice = () => {
         const printContent = document.getElementById("print-area").innerHTML;
         const originalContent = document.body.innerHTML;
         document.body.innerHTML = printContent;
         window.print();
         document.body.innerHTML = originalContent;
-        window.location.reload(); // Reload to restore React app
+        window.location.reload();
     };
 
     return (
@@ -110,13 +106,13 @@ const AdminOrders = () => {
                 </Table>
             </div>
 
-            {/* MODAL */}
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
-                <Modal.Header closeButton><Modal.Title>Order Details #{selectedOrder?.id}</Modal.Title></Modal.Header>
+                <Modal.Header closeButton>
+                    <Modal.Title>Order Details #{selectedOrder?.id}</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
                     {selectedOrder && (
                         <div id="print-area" className="p-2">
-                            {/* PRINT HEADER */}
                             <div className="text-center mb-4 border-bottom pb-3">
                                 <h2>Human Care Pharmacy</h2>
                                 <p>Order Receipt</p>
@@ -134,7 +130,9 @@ const AdminOrders = () => {
                             </div>
 
                             <Table bordered>
-                                <thead><tr><th>Item</th><th>Unit</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+                                <thead>
+                                    <tr><th>Item</th><th>Unit</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+                                </thead>
                                 <tbody>
                                     {selectedOrder.items.map((item, idx) => (
                                         <tr key={idx}>
@@ -147,9 +145,9 @@ const AdminOrders = () => {
                                     ))}
                                 </tbody>
                             </Table>
+
                             <h4 className="text-end mt-3">Total: Rs. {selectedOrder.total_amount}</h4>
 
-                            {/* Tracking Times (Only visible if set) */}
                             <div className="mt-4 small text-muted border-top pt-2">
                                 {selectedOrder.processed_at && <p>Processing: {new Date(selectedOrder.processed_at).toLocaleString()}</p>}
                                 {selectedOrder.packed_at && <p>Packed: {new Date(selectedOrder.packed_at).toLocaleString()}</p>}
@@ -157,7 +155,6 @@ const AdminOrders = () => {
                                 {selectedOrder.delivered_at && <p>Delivered: {new Date(selectedOrder.delivered_at).toLocaleString()}</p>}
                             </div>
                             
-                            {/* Rejection Note */}
                             {selectedOrder.status === 'Rejected' && (
                                 <div className="alert alert-danger mt-3">
                                     <strong>Reason for Rejection:</strong> {selectedOrder.rejection_reason}
@@ -166,7 +163,6 @@ const AdminOrders = () => {
                         </div>
                     )}
 
-                    {/* STATUS CONTROLS (Not for Print) */}
                     <hr/>
                     <div className="d-flex align-items-center gap-3">
                         <Form.Select value={statusToUpdate} onChange={(e)=>setStatusToUpdate(e.target.value)}>
@@ -177,7 +173,7 @@ const AdminOrders = () => {
                             <option value="Delivered">Delivered</option>
                             <option value="Rejected">Rejected</option>
                         </Form.Select>
-                        
+
                         {statusToUpdate === 'Rejected' && (
                             <Form.Control placeholder="Reason for rejection..." onChange={(e)=>setRejectReason(e.target.value)} />
                         )}
@@ -185,7 +181,6 @@ const AdminOrders = () => {
                         <Button variant="primary" onClick={updateStatus}>Update Status</Button>
                         <Button variant="dark" onClick={printInvoice}><FaPrint/> Print</Button>
                     </div>
-
                 </Modal.Body>
             </Modal>
         </DashboardLayout>

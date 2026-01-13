@@ -1,21 +1,19 @@
-// src/components/ProductSection.js
 import React, { useState } from 'react';
-import { Container, Row, Col, Nav, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 import { FaChevronRight } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ProductSection = ({ allProducts, addToCart }) => {
-    const [activeTab, setActiveTab] = useState('devices');
+    const [activeTab, setActiveTab] = useState('family');
 
-    // Filter Logic (Show only latest 4 items)
     const filteredProducts = allProducts
         .filter(p => p.section === activeTab)
-        .slice(0, 4); // Only 1 Row
+        .slice(0, 4);
 
     const tabs = [
-        { key: 'devices', label: 'Devices' },
         { key: 'family', label: 'Family Care' },
+        { key: 'devices', label: 'Devices' },
         { key: 'herbal', label: 'Herbals' },
         { key: 'cosmetics', label: 'Cosmetics' },
         { key: 'wellness', label: 'Wellness' },
@@ -25,7 +23,6 @@ const ProductSection = ({ allProducts, addToCart }) => {
     return (
         <div style={{background: '#f0f2f5', padding: '50px 0'}}>
             <Container>
-                {/* HEADER & TABS */}
                 <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
                     <h3 className="fw-bold mb-3 mb-md-0">Shop by Category</h3>
                     
@@ -44,7 +41,6 @@ const ProductSection = ({ allProducts, addToCart }) => {
                     </div>
                 </div>
 
-                {/* PRODUCTS GRID (Animated) */}
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={activeTab}

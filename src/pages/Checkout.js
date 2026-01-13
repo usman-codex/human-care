@@ -4,7 +4,7 @@ import { Container, Row, Col, Form, Button, Card, ListGroup } from 'react-bootst
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Checkout = ({ cart, totals }) => {
+const Checkout = ({ cart, totals, clearCart }) => { // clearCart prop add kiya
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '', phone: '', address: '', city: 'Lahore'
@@ -20,8 +20,12 @@ const Checkout = ({ cart, totals }) => {
             return;
         }
 
+        // --- GET USER ID (DYNAMIC) ---
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user ? user.id : 0; 
+
         const orderData = {
-            user_id: 1, // Agar login system hai to user ID yahan ayegi
+            user_id: userId,
             customer_name: formData.name,
             phone: formData.phone,
             address: formData.address,
@@ -32,16 +36,15 @@ const Checkout = ({ cart, totals }) => {
 
         try {
             const res = await axios.post('http://localhost/human-care/backend/place_order.php', orderData);
+            
             if (res.data.success) {
-                alert("Order Placed Successfully! Order ID: " + res.data.order_id);
-                // Cart khali karne ka logic yahan aana chahiye (App.js me)
-                // Filhal hum Home par bhej dete hain
-                navigate('/');
-                window.location.reload(); // Refresh to clear cart (Temporary fix)
+                alert("Order Placed Successfully!");
+                clearCart(); // Cart khali karo (App.js function)
+                navigate('/'); // Home par bhejo
             } else {
                 alert("Error: " + res.data.message);
             }
-        } catch (err) { alert("Server Error"); }
+        } catch (err) { alert("Server Error. Check Backend Connection."); }
     };
 
     return (
@@ -57,7 +60,7 @@ const Checkout = ({ cart, totals }) => {
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Full Name</Form.Label>
-                                        <Form.Control name="name" onChange={handleChange} required placeholder="e.g Ali Ahmed" />
+                                        <Form.Control name="name" onChange={handleChange} required placeholder="Your Name" />
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
@@ -74,6 +77,7 @@ const Checkout = ({ cart, totals }) => {
                                     <option value="Lahore">Lahore</option>
                                     <option value="Karachi">Karachi</option>
                                     <option value="Islamabad">Islamabad</option>
+                                    <option value="Multan">Multan</option>
                                 </Form.Select>
                             </Form.Group>
 

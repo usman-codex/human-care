@@ -12,7 +12,7 @@ import Home from './pages/Home';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout'; 
 import MyOrders from './pages/MyOrders'; 
-import UploadPrescription from './pages/UploadPrescription';
+import UploadPrescription from './pages/UploadPrescription'; // New Page
 
 // ADMIN IMPORTS
 import AdminLogin from './pages/admin/AdminLogin';
@@ -20,10 +20,11 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminEmployees from './pages/admin/AdminEmployees';
 import AdminOrders from './pages/admin/AdminOrders'; 
-import AdminSales from './pages/admin/AdminSales';
-import AdminPrescriptions from './pages/admin/AdminPrescriptions'; // <--- Sales Page Import
+import AdminSales from './pages/admin/AdminSales'; 
+import AdminPrescriptions from './pages/admin/AdminPrescriptions'; 
 
-// --- SECURITY ROUTES ---
+
+// SECURITY ROUTES
 const AdminRoute = ({ children }) => {
     const isAuthenticated = localStorage.getItem('adminToken');
     return isAuthenticated ? children : <Navigate to="/admin/login" />;
@@ -35,15 +36,26 @@ const UserRoute = ({ children }) => {
 };
 
 function App() {
-  const [cart, setCart] = useState([]);
+  // --- FIX: CART STATE INITIALIZATION (Load from Storage) ---
+  const [cart, setCart] = useState(() => {
+      const savedCart = localStorage.getItem('myShoppingCart');
+      return savedCart ? JSON.parse(savedCart) : [];
+  });
+
   const [showCart, setShowCart] = useState(false);
   const [user, setUser] = useState(null);
   const [triggerLogin, setTriggerLogin] = useState(false);
 
+  // Load User from Storage
   useEffect(() => {
       const loggedUser = localStorage.getItem('user');
       if (loggedUser) setUser(JSON.parse(loggedUser));
   }, []);
+
+  // --- FIX: SAVE CART TO STORAGE WHENEVER IT CHANGES ---
+  useEffect(() => {
+      localStorage.setItem('myShoppingCart', JSON.stringify(cart));
+  }, [cart]);
 
   const openLoginModal = () => setTriggerLogin(prev => !prev);
 
@@ -59,7 +71,10 @@ function App() {
     setShowCart(true); 
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+      setCart([]);
+      localStorage.removeItem('myShoppingCart'); // Storage se bhi clear karo
+  };
 
   const decreaseQty = (product) => {
       const exist = cart.find((x) => x.id === product.id && x.unit === product.unit);
@@ -93,12 +108,19 @@ function App() {
                 </>
             } />
 
+            <Route path="/upload-prescription" element={
+                <>
+                    <Header cartCount={cart.length} openCart={()=>setShowCart(true)} user={user} setUser={setUser} />
+                    <UploadPrescription />
+                </>
+            } />
+
             {/* SECURE USER */}
             <Route path="/checkout" element={
                 <UserRoute>
                     <>
                         <Header cartCount={cart.length} openCart={()=>setShowCart(true)} user={user} setUser={setUser} />
-                        <Checkout cart={cart} totals={{subTotal, deliveryCharges, grandTotal}} clearCart={clearCart} user={user} />
+                        <Checkout cart={cart} totals={{subTotal, deliveryCharges, grandTotal}} clearCart={clearCart} />
                     </>
                 </UserRoute>
             } />
@@ -112,21 +134,13 @@ function App() {
                 </UserRoute>
             } />
 
-            <Route path="/upload-prescription" element={
-    <>
-        <Header cartCount={cart.length} openCart={()=>setShowCart(true)} user={user} setUser={setUser} />
-        <UploadPrescription />
-    </>
-} />
-
             {/* ADMIN ROUTES */}
             <Route path="/admin/login" element={<AdminLogin />} />
-            
             <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/admin/products" element={<AdminRoute><AdminProducts /></AdminRoute>} />
             <Route path="/admin/employees" element={<AdminRoute><AdminEmployees /></AdminRoute>} />
             <Route path="/admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>} />
-            <Route path="/admin/sales" element={<AdminRoute><AdminSales /></AdminRoute>} /> {/* Sales Page */}
+            <Route path="/admin/sales" element={<AdminRoute><AdminSales /></AdminRoute>} />
             <Route path="/admin/prescriptions" element={<AdminRoute><AdminPrescriptions /></AdminRoute>} />
             
         </Routes>

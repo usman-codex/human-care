@@ -268,3 +268,38 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
 }
+
+
+/* App.css */
+
+/* Search Dropdown Style */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+}
+
+.search-item {
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Scrollbar styling for dropdown */
+.search-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+.search-dropdown::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}

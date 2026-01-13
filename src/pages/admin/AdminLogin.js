@@ -1,4 +1,3 @@
-// src/pages/admin/AdminLogin.js
 import React, { useState } from 'react';
 import { Container, Card, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
@@ -14,13 +13,14 @@ const AdminLogin = () => {
         try {
             const res = await axios.post('http://localhost/human-care/backend/admin_login.php', { email, password });
             if(res.data.success) {
-                // Token save karein taake yaad rahe admin login hai
                 localStorage.setItem('adminToken', 'logged_in'); 
-                navigate('/admin/dashboard'); // Dashboard par bhej dein
+                navigate('/admin/dashboard');
             } else {
                 alert("Ghalat Email ya Password!");
             }
-        } catch(err) { alert("Server Error"); }
+        } catch(err) { 
+            alert("Server Error"); 
+        }
     };
 
     return (

@@ -1,11 +1,15 @@
-// src/pages/admin/AdminProducts.js
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
-import { Table, Button, Modal, Form, Row, Col, Badge } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Row, Col, Badge, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
-import { FaTrash, FaPlus, FaEdit, FaUpload } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaEdit, FaSearch } from 'react-icons/fa';
 
-const categoriesList = ["Tablets", "Syrup", "Injection", "Capsules", "Drops", "Ointment/Cream", "Sachet", "Suspension", "Gel", "Inhaler", "Drip/IV", "Surgical"];
+const categoriesList = [
+    "Tablets", "Capsules", "Syrup", "Injection", "Drops", 
+    "Ointment/Cream", "Sachet", "Suspension", "Gel", "Inhaler", 
+    "Drip/IV", "Surgical", "Devices", "Consumer Goods"
+];
+
 const genericsList = ["Paracetamol", "Ibuprofen", "Omeprazole", "Amoxicillin", "Ciprofloxacin", "Metformin", "Atorvastatin", "Aspirin", "Azithromycin", "Cetirizine"];
 
 const AdminProducts = () => {
@@ -13,6 +17,7 @@ const AdminProducts = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editProductId, setEditProductId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const [formData, setFormData] = useState({
         name: '', category: 'Tablets', section: 'featured', price: '', old_price: '', 
@@ -21,34 +26,48 @@ const AdminProducts = () => {
     });
     const [imageFile, setImageFile] = useState(null);
 
+    const isStripCategory = formData.category === 'Tablets' || formData.category === 'Capsules';
+
     const fetchProducts = async () => {
         try {
             const res = await axios.get('http://localhost/human-care/backend/get_products.php');
-            setProducts(res.data);
+            
+            if (Array.isArray(res.data)) {
+                setProducts(res.data);
+            } else {
+                setProducts([]);
+            }
         } catch (error) { console.error("Error fetching products"); }
     };
 
     useEffect(() => { fetchProducts(); }, []);
 
-    // --- AUTO CALCULATE DISCOUNT ---
+    const filteredProducts = Array.isArray(products) ? products.filter((product) => {
+        const term = searchTerm.toLowerCase().trim();
+        
+        if (!term) return true;
+
+        const name = String(product.name || "").toLowerCase();
+        const generic = String(product.generic_name || "").toLowerCase();
+        
+        return name.includes(term) || generic.includes(term);
+    }) : [];
+
     const handlePriceChange = (e) => {
         const { name, value } = e.target;
-        
         let newFormData = { ...formData, [name]: value };
 
-        // Agar Price ya Old Price change ho raha hai, to Discount calculate karo
         if (name === 'price' || name === 'old_price') {
             const price = parseFloat(name === 'price' ? value : formData.price) || 0;
             const oldPrice = parseFloat(name === 'old_price' ? value : formData.old_price) || 0;
 
             if (oldPrice > price) {
                 const discountVal = ((oldPrice - price) / oldPrice) * 100;
-                newFormData.discount = Math.round(discountVal); // Round Figure
+                newFormData.discount = Math.round(discountVal);
             } else {
-                newFormData.discount = 0; // No Discount
+                newFormData.discount = 0;
             }
         }
-        
         setFormData(newFormData);
     };
 
@@ -76,6 +95,12 @@ const AdminProducts = () => {
         e.preventDefault();
         const data = new FormData();
         Object.keys(formData).forEach(key => data.append(key, formData[key]));
+        
+        if(!isStripCategory) {
+            data.set('strips_per_pack', '1');
+            data.set('tablets_per_strip', '1');
+        }
+
         if (imageFile) data.append('image', imageFile);
         if (editMode) data.append('id', editProductId);
 
@@ -102,33 +127,58 @@ const AdminProducts = () => {
 
     return (
         <DashboardLayout>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h3>Medicines Inventory</h3>
-                <Button variant="primary" onClick={() => handleModalOpen(null)}><FaPlus className="me-2"/> Add New Medicine</Button>
+            <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <h3 className="m-0">Medicines Inventory</h3>
+                
+                <InputGroup style={{ maxWidth: '400px', width: '100%' }}>
+                    <InputGroup.Text className="bg-white border-end-0">
+                        <FaSearch className="text-muted" />
+                    </InputGroup.Text>
+                    <Form.Control 
+                        placeholder="Search by Name or Generic..." 
+                        className="border-start-0 ps-0 shadow-none"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </InputGroup>
+
+                <Button variant="primary" style={{whiteSpace:'nowrap'}} onClick={() => handleModalOpen(null)}>
+                    <FaPlus className="me-2"/> Add New Medicine
+                </Button>
             </div>
 
             <div className="bg-white p-3 shadow-sm rounded">
                 <Table hover responsive>
                     <thead className="bg-light">
                         <tr>
-                            <th>Image</th><th>Name</th><th>Category</th><th>Generic</th><th>Price</th><th>Discount</th><th>Action</th>
+                            <th>Image</th><th>Name</th><th>Category</th><th>Generic</th><th>Price</th><th>Stock</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((item) => (
-                            <tr key={item.id} style={{verticalAlign:'middle'}}>
-                                <td><img src={item.image} width="40" style={{borderRadius:'5px'}} alt=""/></td>
-                                <td className="fw-bold">{item.name}</td>
-                                <td>{item.category}</td>
-                                <td>{item.generic_name}</td>
-                                <td>Rs. {item.price}</td>
-                                <td>{item.discount > 0 ? <Badge bg="danger">{item.discount}% OFF</Badge> : '-'}</td>
-                                <td>
-                                    <Button variant="warning" size="sm" className="me-2 text-white" onClick={() => handleModalOpen(item)}><FaEdit /></Button>
-                                    <Button variant="danger" size="sm" onClick={() => handleDelete(item.id)}><FaTrash /></Button>
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((item) => (
+                                <tr key={item.id} style={{verticalAlign:'middle'}}>
+                                    <td><img src={item.image} width="40" style={{borderRadius:'5px'}} alt=""/></td>
+                                    <td className="fw-bold">{item.name}</td>
+                                    <td>{item.category}</td>
+                                    <td><small className="text-muted">{item.generic_name}</small></td>
+                                    <td>Rs. {item.price}</td>
+                                    <td>
+                                        {item.stock < 5 ? <span className="text-danger fw-bold">{item.stock} (Low)</span> : item.stock}
+                                    </td>
+                                    <td>
+                                        <Button variant="warning" size="sm" className="me-2 text-white" onClick={() => handleModalOpen(item)}><FaEdit /></Button>
+                                        <Button variant="danger" size="sm" onClick={() => handleDelete(item.id)}><FaTrash /></Button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="7" className="text-center py-4 text-muted">
+                                    {products.length === 0 ? "Loading or No Data..." : `No match for "${searchTerm}"`}
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </Table>
             </div>
@@ -165,32 +215,33 @@ const AdminProducts = () => {
                         </Row>
 
                         <Row className="bg-light p-2 mb-3 rounded border">
-                            <Col md={12}><h6 className="text-primary fw-bold">Pack & Price Calculation</h6></Col>
-                            
+                            <Col md={12}><h6 className="text-primary fw-bold">Price & Stock</h6></Col>
                             <Col md={4}>
-                                <Form.Group className="mb-3"><Form.Label>Price (Sale Price)</Form.Label>
+                                <Form.Group className="mb-3"><Form.Label>Price</Form.Label>
                                 <Form.Control type="number" name="price" value={formData.price} onChange={handlePriceChange} required /></Form.Group>
                             </Col>
-                            
                             <Col md={4}>
-                                <Form.Group className="mb-3"><Form.Label>Old Price (MRP)</Form.Label>
+                                <Form.Group className="mb-3"><Form.Label>Old Price</Form.Label>
                                 <Form.Control type="number" name="old_price" value={formData.old_price} onChange={handlePriceChange} /></Form.Group>
                             </Col>
-                            
-                            {/* DISCOUNT FIELD (READ ONLY - Auto Calculate Hoga) */}
                             <Col md={4}>
-                                <Form.Group className="mb-3"><Form.Label>Auto Discount %</Form.Label>
+                                <Form.Group className="mb-3"><Form.Label>Discount %</Form.Label>
                                 <Form.Control type="number" name="discount" value={formData.discount} readOnly style={{background:'#e9ecef'}} /></Form.Group>
                             </Col>
 
-                            <Col md={6}>
-                                <Form.Group className="mb-3"><Form.Label>Strips in 1 Pack</Form.Label>
-                                <Form.Control type="number" name="strips_per_pack" value={formData.strips_per_pack} onChange={handlePriceChange} /></Form.Group>
-                            </Col>
-                            <Col md={6}>
-                                <Form.Group className="mb-3"><Form.Label>Tablets in 1 Strip</Form.Label>
-                                <Form.Control type="number" name="tablets_per_strip" value={formData.tablets_per_strip} onChange={handlePriceChange} /></Form.Group>
-                            </Col>
+                            {isStripCategory && (
+                                <>
+                                    <Col md={12} className="mt-2"><div className="border-top mb-2"></div><small className="text-muted fw-bold">Tablets/Capsules Only:</small></Col>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3"><Form.Label>Strips in 1 Pack</Form.Label>
+                                        <Form.Control type="number" name="strips_per_pack" value={formData.strips_per_pack} onChange={handlePriceChange} /></Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3"><Form.Label>Tablets in 1 Strip</Form.Label>
+                                        <Form.Control type="number" name="tablets_per_strip" value={formData.tablets_per_strip} onChange={handlePriceChange} /></Form.Group>
+                                    </Col>
+                                </>
+                            )}
                         </Row>
 
                         <Row>
@@ -201,10 +252,16 @@ const AdminProducts = () => {
                                     <option value="devices">Devices</option>
                                     <option value="family">Family Care</option>
                                     <option value="herbal">Herbal</option>
+                                    <option value="cosmetics">Cosmetics</option>
+                                    <option value="wellness">Wellness</option>
+                                    <option value="sexual">Sexual Health</option>
                                 </Form.Select>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
+                                <Form.Group className="mb-3"><Form.Label>Stock Quantity</Form.Label><Form.Control type="number" name="stock" value={formData.stock} onChange={handlePriceChange} /></Form.Group>
+                            </Col>
+                            <Col md={12}>
                                 <Form.Group className="mb-3"><Form.Label>Upload Image</Form.Label><Form.Control type="file" onChange={handleFileChange} /></Form.Group>
                             </Col>
                         </Row>
