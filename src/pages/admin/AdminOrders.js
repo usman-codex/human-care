@@ -17,7 +17,7 @@ const AdminOrders = () => {
 
     const fetchOrders = async () => {
         try {
-            const res = await axios.get('http://localhost/human-care/backend/get_orders.php');
+            const res = await axios.get('http://humancare.mywebcommunity.org/backend/get_orders.php');
             setOrders(res.data);
             setFilteredOrders(res.data);
         } catch (err) { console.error("Error"); }
@@ -45,7 +45,7 @@ const AdminOrders = () => {
             alert("Please enter a reason for rejection.");
             return;
         }
-        await axios.post('http://localhost/human-care/backend/update_order_status.php', {
+        await axios.post('http://humancare.mywebcommunity.org/backend/update_order_status.php', {
             order_id: selectedOrder.id,
             status: statusToUpdate,
             reason: rejectReason

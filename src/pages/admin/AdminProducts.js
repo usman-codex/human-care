@@ -30,7 +30,7 @@ const AdminProducts = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await axios.get('http://localhost/human-care/backend/get_products.php');
+            const res = await axios.get('http://humancare.mywebcommunity.org/backend/get_products.php');
             
             if (Array.isArray(res.data)) {
                 setProducts(res.data);
@@ -105,8 +105,8 @@ const AdminProducts = () => {
         if (editMode) data.append('id', editProductId);
 
         let url = editMode 
-            ? 'http://localhost/human-care/backend/update_product.php'
-            : 'http://localhost/human-care/backend/add_product.php';
+            ? 'http://humancare.mywebcommunity.org/backend/update_product.php'
+            : 'http://humancare.mywebcommunity.org/backend/add_product.php';
 
         try {
             const res = await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -120,7 +120,7 @@ const AdminProducts = () => {
 
     const handleDelete = async (id) => {
         if(window.confirm("Delete?")) {
-            await axios.post('http://localhost/human-care/backend/delete_product.php', { id });
+            await axios.post('http://humancare.mywebcommunity.org/backend/delete_product.php', { id });
             fetchProducts();
         }
     };

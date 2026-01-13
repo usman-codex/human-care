@@ -1,8 +1,7 @@
-/* App.css - Updated for Alignment & Logo */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-color: #2761e7; /* Healthwire Blue */
+  --primary-color: #2761e7;
   --secondary-color: #f8f9fa;
   --text-dark: #333;
   --text-light: #666;
@@ -14,7 +13,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Header Styles */
 .top-header {
   background: white;
   padding: 15px 0;
@@ -24,7 +22,6 @@ body {
   z-index: 1000;
 }
 
-/* New Logo Style */
 .brand-logo {
   font-size: 26px;
   font-weight: 700;
@@ -38,7 +35,6 @@ body {
   color: var(--primary-color);
 }
 
-/* Custom Search Bar */
 .search-container {
   position: relative;
   width: 100%;
@@ -61,7 +57,6 @@ body {
   background-color: #1a4dbf;
 }
 
-/* Icons & Buttons */
 .cart-icon-box {
   position: relative;
   cursor: pointer;
@@ -74,7 +69,6 @@ body {
   color: var(--primary-color);
 }
 
-/* Cart Badge - Sirf tab dikhega jab item ho */
 .cart-badge {
   position: absolute;
   top: -8px;
@@ -103,7 +97,6 @@ body {
   color: white;
 }
 
-/* User Profile Icon */
 .user-profile-icon {
   width: 40px;
   height: 40px;
@@ -122,21 +115,19 @@ body {
   color: white;
 }
 
-/* --- NAVBAR ALIGNMENT FIX --- */
 .main-navbar {
   background: white;
   border-top: 1px solid #f0f0f0;
   padding: 0;
-  height: 60px; /* Fixed height for alignment */
+  height: 60px;
   display: flex;
-  align-items: center; /* Vertical Center */
+  align-items: center;
 }
 
-/* Flex Container for Nav Items */
 .custom-nav-container {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between items */
+  gap: 10px;
   height: 100%;
 }
 
@@ -144,14 +135,14 @@ body {
   color: var(--text-dark) !important;
   font-weight: 500;
   font-size: 15px;
-  padding: 0 15px; /* Side padding only */
-  height: 60px; /* Full Navbar height */
+  padding: 0 15px;
+  height: 60px;
   display: flex;
-  align-items: center; /* Center text vertically */
+  align-items: center;
   transition: 0.3s;
   cursor: pointer;
   text-decoration: none;
-  border-bottom: 3px solid transparent; /* Hover effect ke liye */
+  border-bottom: 3px solid transparent;
 }
 
 .nav-link-custom:hover, .nav-item-custom:hover {
@@ -160,7 +151,6 @@ body {
   background-color: #f8faff;
 }
 
-/* Hover Dropdown Adjustment */
 .nav-item-custom {
   position: relative;
 }
@@ -168,7 +158,7 @@ body {
 .custom-dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%; /* Just below the navbar */
+  top: 100%;
   left: 0;
   background: white;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -200,14 +190,11 @@ body {
   padding-left: 25px;
 }
 
-
-
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hero Section */
 .hero-section {
     background: linear-gradient(105deg, #e3f2fd 0%, #ffffff 60%);
     padding: 60px 0;
@@ -216,7 +203,6 @@ body {
     box-shadow: 0 5px 20px rgba(0,0,0,0.03);
 }
 
-/* Mobile Sidebar & Profile Menu styles remain same as before... */
 .profile-menu {
   position: absolute;
   top: 60px;
@@ -262,17 +248,11 @@ body {
 }
 .overlay.active { display: block; }
 
-
-/* App.css */
 .shadow-hover:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
 }
 
-
-/* App.css */
-
-/* Search Dropdown Style */
 .search-dropdown {
     position: absolute;
     top: 100%;
@@ -295,7 +275,6 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Scrollbar styling for dropdown */
 .search-dropdown::-webkit-scrollbar {
     width: 6px;
 }

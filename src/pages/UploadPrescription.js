@@ -1,4 +1,4 @@
-// src/pages/UploadPrescription.js
+
 import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
@@ -23,7 +23,7 @@ const UploadPrescription = () => {
         }
 
         try {
-            const res = await axios.post('http://localhost/human-care/backend/upload_prescription.php', formData);
+            const res = await axios.post('http://humancare.mywebcommunity.org/backend/upload_prescription.php', formData);
             if(res.data.success) {
                 setMessage({type: 'success', text: 'Prescription Uploaded Successfully! Our pharmacist will call you shortly.'});
                 setName(''); setPhone(''); setFile(null);
@@ -47,11 +47,11 @@ const UploadPrescription = () => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Patient Name</Form.Label>
-                        <Form.Control value={name} onChange={(e)=>setName(e.target.value)} required placeholder="e.g Ali" />
+                        <Form.Control value={name} onChange={(e)=>setName(e.target.value)} required placeholder="e.g Your Name" />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Phone Number</Form.Label>
-                        <Form.Control value={phone} onChange={(e)=>setPhone(e.target.value)} required placeholder="0300-1234567" />
+                        <Form.Control value={phone} onChange={(e)=>setPhone(e.target.value)} required placeholder="0300-0000000" />
                     </Form.Group>
                     <Form.Group className="mb-4">
                         <Form.Label>Select Image</Form.Label>

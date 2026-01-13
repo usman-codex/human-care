@@ -11,11 +11,11 @@ const ProductDetails = ({ cart, addToCart, decreaseQty }) => {
     const [cartItem, setCartItem] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost/human-care/backend/get_products.php').then(res => {
+        axios.get('http://humancare.mywebcommunity.org/backend/get_products.php').then(res => {
             const found = res.data.find(p => p.id == id);
             setProduct(found);
             
-            // Check Category
+           
             const isStripItem = found?.category === 'Tablets' || found?.category === 'Capsules';
             setSelectedUnit(isStripItem ? 'strip' : 'pack');
         });
@@ -30,11 +30,11 @@ const ProductDetails = ({ cart, addToCart, decreaseQty }) => {
 
     if (!product) return <div className="text-center mt-5">Loading...</div>;
 
-    // --- STOCK CHECK LOGIC ---
+   
     const stock = parseInt(product.stock);
-    const isOutOfStock = stock <= 0; // Agar 0 ya us se kam hai
+    const isOutOfStock = stock <= 0; 
 
-    // --- CALCULATIONS ---
+    
     const isStripCategory = product.category === 'Tablets' || product.category === 'Capsules';
     const discountPercent = parseFloat(product.discount) || 0;
     const packPrice = parseFloat(product.price);
@@ -71,7 +71,7 @@ const ProductDetails = ({ cart, addToCart, decreaseQty }) => {
                     <h2 className="fw-bold text-primary">{product.name}</h2>
                     
                     <div className="mb-2">
-                        {/* STOCK BADGE LOGIC */}
+                       
                         {isOutOfStock ? (
                             <Badge bg="danger" className="me-2">Out of Stock</Badge>
                         ) : (
@@ -102,7 +102,7 @@ const ProductDetails = ({ cart, addToCart, decreaseQty }) => {
                                     checked={selectedUnit === 'strip'}
                                     onChange={() => setSelectedUnit('strip')}
                                     className="mb-2 custom-radio"
-                                    disabled={isOutOfStock} // Stock nahi to select bhi na ho
+                                    disabled={isOutOfStock} 
                                 />
                                 <Form.Check 
                                     type="radio" id="pack-opt" name="unit-select"
@@ -117,7 +117,7 @@ const ProductDetails = ({ cart, addToCart, decreaseQty }) => {
                     )}
 
                     <div className="d-flex gap-3">
-                        {/* Agar Stock hai to Buttons dikhao, warna Disabled Button */}
+                      
                         {!isOutOfStock ? (
                             cartItem ? (
                                 <div className="d-flex align-items-center bg-primary text-white rounded overflow-hidden" style={{width:'150px'}}>

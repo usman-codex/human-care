@@ -11,7 +11,7 @@ const AdminLogin = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost/human-care/backend/admin_login.php', { email, password });
+            const res = await axios.post('http://humancare.mywebcommunity.org/backend/admin_login.php', { email, password });
             if(res.data.success) {
                 localStorage.setItem('adminToken', 'logged_in'); 
                 navigate('/admin/dashboard');

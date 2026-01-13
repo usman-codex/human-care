@@ -1,4 +1,4 @@
-// src/pages/AdminPanel.js
+
 import React, { useState } from 'react';
 import { Container, Form, Button, Card, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const AdminPanel = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost/human-care/backend/add_product.php', product);
+            const res = await axios.post('http://humancare.mywebcommunity.org/backend/add_product.php', product);
             if(res.data.success) alert("Product Added!");
             else alert("Error");
         } catch(err) { alert("Server Error"); }

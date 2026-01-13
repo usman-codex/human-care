@@ -23,7 +23,7 @@ const Header = ({ cartCount, openCart, user, setUser, triggerLogin }) => {
     }, [triggerLogin]);
 
     useEffect(() => {
-        axios.get('http://localhost/human-care/backend/get_products.php')
+        axios.get('http://humancare.mywebcommunity.org/backend/get_products.php')
             .then(res => setAllProducts(res.data))
             .catch(err => console.error(err));
     }, []);

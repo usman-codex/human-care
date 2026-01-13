@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
@@ -10,15 +9,12 @@ import { motion } from 'framer-motion';
 
 const Home = ({ addToCart }) => {
     const [products, setProducts] = useState([]);
-    
-    // Pagination States
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20; 
 
     useEffect(() => {
-        axios.get('http://localhost/human-care/backend/get_products.php')
+        axios.get('http://humancare.mywebcommunity.org/backend/get_products.php')
             .then(res => {
-                // Check if data is valid array
                 if (Array.isArray(res.data)) {
                     setProducts(res.data);
                 } else {
@@ -28,27 +24,18 @@ const Home = ({ addToCart }) => {
             .catch(err => { console.error(err); setProducts([]); });
     }, []);
 
-    // Pagination Logic (Safe check added)
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    
-    // Ensure products is an array before slicing
     const currentAllProducts = Array.isArray(products) ? products.slice(indexOfFirstItem, indexOfLastItem) : [];
     const totalPages = Math.ceil(products.length / itemsPerPage);
 
     return (
         <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', paddingBottom: '80px' }}>
             
-            {/* 1. HERO SLIDER */}
             <HeroSlider />
-            
-            {/* 2. EXPLORE CATEGORIES */}
             <ExploreCategories />
-
-            {/* 3. TABS SECTION */}
             <ProductSection allProducts={products} addToCart={addToCart} />
 
-            {/* 4. FEATURED MEDICINES (Highlight Section) */}
             <section className="py-5" style={{background:'#fff'}}>
                 <Container>
                     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -57,7 +44,6 @@ const Home = ({ addToCart }) => {
                     </div>
                     
                     <Row>
-                        {/* --- FIX: Array Check Lagaya --- */}
                         {Array.isArray(products) && products.length > 0 ? (
                             products.filter(p => p.section === 'featured').slice(0, 4).map((item) => (
                                 <Col xs={12} sm={6} md={3} key={item.id} className="mb-4">
@@ -71,7 +57,6 @@ const Home = ({ addToCart }) => {
                 </Container>
             </section>
 
-            {/* 5. ALL MEDICINES SECTION */}
             <Container className="mt-5">
                 <div className="text-center mb-5">
                     <h2 className="fw-bold">All Medicines</h2>
@@ -89,7 +74,6 @@ const Home = ({ addToCart }) => {
                     ))}
                 </Row>
 
-                {/* Pagination Controls */}
                 {totalPages > 1 && (
                     <div className="d-flex justify-content-center mt-4">
                         <Pagination>

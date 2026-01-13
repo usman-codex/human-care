@@ -1,4 +1,4 @@
-// src/components/admin/DashboardLayout.js
+
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { FaChartLine, FaPills, FaUserTie, FaBoxOpen, FaSignOutAlt, FaMoneyBillWave } from 'react-icons/fa';
@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
 
     return (
         <div className="d-flex" style={{ minHeight: '100vh', background: '#f8f9fa' }}>
-            {/* --- SIDEBAR --- */}
+           
             <div className="bg-dark text-white p-3" style={{ width: '250px', minHeight: '100vh' }}>
                 <h4 className="fw-bold mb-4 ps-2">Human Care <span style={{fontSize:'12px', color:'#aaa'}}>Admin</span></h4>
                 <Nav className="flex-column gap-2">
@@ -37,15 +37,15 @@ const DashboardLayout = ({ children }) => {
                 </Nav>
             </div>
 
-            {/* --- MAIN CONTENT AREA --- */}
+          
             <div className="flex-grow-1 p-4">
-                {/* Top Header */}
+               
                 <div className="bg-white p-3 rounded shadow-sm mb-4 d-flex justify-content-between">
                     <h5 className="m-0 text-secondary">Overview</h5>
-                    <div className="fw-bold">Admin: Super User</div>
+                    <div className="fw-bold">Admin User</div>
                 </div>
                 
-                {/* Page Content */}
+                
                 {children}
             </div>
         </div>

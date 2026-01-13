@@ -13,7 +13,7 @@ const AdminEmployees = () => {
     });
 
     const fetchEmployees = async () => {
-        const res = await axios.get('http://localhost/human-care/backend/get_employees.php');
+        const res = await axios.get('http://humancare.mywebcommunity.org/backend/get_employees.php');
         setEmployees(res.data);
     };
 
@@ -24,7 +24,7 @@ const AdminEmployees = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost/human-care/backend/add_employee.php', formData);
+            const res = await axios.post('http://humancare.mywebcommunity.org/backend/add_employee.php', formData);
             if(res.data.success) {
                 alert("Employee Added!");
                 setShowModal(false);
@@ -36,7 +36,7 @@ const AdminEmployees = () => {
 
     const handleDelete = async (id) => {
         if(window.confirm("Are you sure you want to remove this employee?")) {
-            await axios.post('http://localhost/human-care/backend/delete_employee.php', { id });
+            await axios.post('http://humancare.mywebcommunity.org/backend/delete_employee.php', { id });
             fetchEmployees();
         }
     };

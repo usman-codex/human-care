@@ -12,7 +12,7 @@ import Home from './pages/Home';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout'; 
 import MyOrders from './pages/MyOrders'; 
-import UploadPrescription from './pages/UploadPrescription'; // New Page
+import UploadPrescription from './pages/UploadPrescription'; 
 
 // ADMIN IMPORTS
 import AdminLogin from './pages/admin/AdminLogin';
@@ -36,7 +36,7 @@ const UserRoute = ({ children }) => {
 };
 
 function App() {
-  // --- FIX: CART STATE INITIALIZATION (Load from Storage) ---
+  
   const [cart, setCart] = useState(() => {
       const savedCart = localStorage.getItem('myShoppingCart');
       return savedCart ? JSON.parse(savedCart) : [];
@@ -46,13 +46,13 @@ function App() {
   const [user, setUser] = useState(null);
   const [triggerLogin, setTriggerLogin] = useState(false);
 
-  // Load User from Storage
+  
   useEffect(() => {
       const loggedUser = localStorage.getItem('user');
       if (loggedUser) setUser(JSON.parse(loggedUser));
   }, []);
 
-  // --- FIX: SAVE CART TO STORAGE WHENEVER IT CHANGES ---
+  
   useEffect(() => {
       localStorage.setItem('myShoppingCart', JSON.stringify(cart));
   }, [cart]);
@@ -73,7 +73,7 @@ function App() {
 
   const clearCart = () => {
       setCart([]);
-      localStorage.removeItem('myShoppingCart'); // Storage se bhi clear karo
+      localStorage.removeItem('myShoppingCart'); 
   };
 
   const decreaseQty = (product) => {

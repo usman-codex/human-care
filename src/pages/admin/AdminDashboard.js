@@ -17,14 +17,14 @@ const AdminDashboard = () => {
     const [lowStockList, setLowStockList] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost/human-care/backend/dashboard_stats.php')
+        axios.get('http://humancare.mywebcommunity.org/backend/dashboard_stats.php')
             .then(res => setStats(res.data))
             .catch(err => console.error("Error fetching stats"));
     }, []);
 
     const handleLowStockClick = async () => {
         try {
-            const res = await axios.get('http://localhost/human-care/backend/get_products.php');
+            const res = await axios.get('http://humancare.mywebcommunity.org/backend/get_products.php');
             const lowItems = res.data.filter(item => parseInt(item.stock) < 5);
             setLowStockList(lowItems);
             setShowModal(true);

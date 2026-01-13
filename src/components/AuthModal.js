@@ -35,7 +35,7 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
                     google_id: userInfo.data.sub
                 };
 
-                const res = await axios.post('http://localhost/human-care/backend/google_auth.php', googleData);
+                const res = await axios.post('http://humancare.mywebcommunity.org/backend/google_auth.php', googleData);
 
                 if (res.data.success) {
                     setSuccessMessage("Google Login Successful!");
@@ -60,7 +60,7 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
 
         if (mode === 'signup') {
             try {
-                const res = await axios.post('http://localhost/human-care/backend/register.php', formData);
+                const res = await axios.post('http://humancare.mywebcommunity.org/backend/register.php', formData);
                 if (res.data.success) {
                     setShowSuccessScreen(true);
                 } else {
@@ -72,7 +72,7 @@ const AuthModal = ({ show, handleClose, handleLoginSuccess }) => {
         } 
         else if (mode === 'login') {
             try {
-                const res = await axios.post('http://localhost/human-care/backend/login.php', formData);
+                const res = await axios.post('http://humancare.mywebcommunity.org/backend/login.php', formData);
                 if (res.data.success) {
                     setSuccessMessage("Login Successful!");
                     setTimeout(() => {

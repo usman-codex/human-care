@@ -11,7 +11,7 @@ const AdminPrescriptions = () => {
 
     const fetchList = async () => {
         try {
-            const res = await axios.get('http://localhost/human-care/backend/get_prescriptions.php');
+            const res = await axios.get('http://humancare.mywebcommunity.org/backend/get_prescriptions.php');
             if (Array.isArray(res.data)) {
                 setList(res.data);
             } else {
@@ -27,7 +27,7 @@ const AdminPrescriptions = () => {
 
     const handleStatus = async (id, status) => {
         try {
-            await axios.post('http://localhost/human-care/backend/update_prescription_status.php', { id, status });
+            await axios.post('http://humancare.mywebcommunity.org/backend/update_prescription_status.php', { id, status });
             fetchList();
         } catch (error) {
             alert("Error updating status");

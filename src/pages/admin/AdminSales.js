@@ -1,4 +1,4 @@
-// src/pages/admin/AdminSales.js
+
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
 import { Row, Col, Card, Table } from 'react-bootstrap';
@@ -14,12 +14,12 @@ const AdminSales = () => {
     });
 
     useEffect(() => {
-        axios.get('http://localhost/human-care/backend/get_sales_report.php')
+        axios.get('http://humancare.mywebcommunity.org/backend/get_sales_report.php')
             .then(res => setSales(res.data))
             .catch(err => console.error("Error fetching sales"));
     }, []);
 
-    // Cards Data
+  
     const cards = [
         { title: "Today's Revenue", amount: sales.today, color: "#4e73df", icon: <FaMoneyBillWave/> },
         { title: "This Month's Revenue", amount: sales.month, color: "#1cc88a", icon: <FaCalendarAlt/> },
@@ -30,7 +30,7 @@ const AdminSales = () => {
         <DashboardLayout>
             <h3 className="mb-4">Financial Report & Billing</h3>
 
-            {/* --- TOP CARDS --- */}
+         
             <Row className="mb-4">
                 {cards.map((card, index) => (
                     <Col md={4} key={index}>
@@ -53,7 +53,7 @@ const AdminSales = () => {
                 ))}
             </Row>
 
-            {/* --- DAILY SALES TABLE --- */}
+          
             <Card className="shadow-sm border-0">
                 <Card.Header className="bg-white py-3">
                     <h6 className="m-0 fw-bold text-primary">Daily Sales History (Delivered Orders)</h6>

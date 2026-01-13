@@ -1,4 +1,4 @@
-// src/pages/MyOrders.js
+
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Row, ProgressBar, Badge } from 'react-bootstrap';
 import axios from 'axios';
@@ -7,14 +7,13 @@ import { FaBoxOpen } from 'react-icons/fa';
 const MyOrders = () => {
     const [orders, setOrders] = useState([]);
     
-    // --- FIX: USER ID DYNAMIC KAR DI ---
-    // LocalStorage se logged in user nikalain
+    
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user ? user.id : 0; 
 
     useEffect(() => {
         if(userId) {
-            axios.get(`http://localhost/human-care/backend/get_user_orders.php?user_id=${userId}`)
+            axios.get(`http://humancare.mywebcommunity.org/backend/get_user_orders.php?user_id=${userId}`)
                 .then(res => setOrders(res.data))
                 .catch(err => console.error(err));
         }
